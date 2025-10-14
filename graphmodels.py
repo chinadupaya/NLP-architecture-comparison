@@ -14,6 +14,12 @@ lstm_metrics = {
     "Word count": 215.80,
 }
 
+transformer_metrics = {
+    "Average total errors": 51.80,
+    "Errors per 100 words": 20.50,
+    "Word count": 256.20,
+}
+
 gru_errors = {
     "TYPOS": 6.80,
     "PUNCTUATION": 3.60,
@@ -35,26 +41,41 @@ lstm_errors = {
     "CONFUSED_WORDS": 0.20,
 }
 
+
+transformer_errors = {
+
+    "TYPOS": 28.40,
+    "MISC": 9.20,
+    "GRAMMAR": 8.00,
+    "PUNCTUATION": 4.60,
+    "TYPOGRAPHY": 0.80,
+    "CASING": 0.60,
+    "CONFUSED_WORDS": 0.20,
+}
+
+
 #overall metrics
 labels = list(gru_metrics.keys())
 gru_vals = list(gru_metrics.values())
 lstm_vals = list(lstm_metrics.values())
+transformer_vals = list(transformer_metrics.values())
 
 x = np.arange(len(labels))  # label locations
-width = 0.35  # bar width
+width = 0.25  # bar width
 
 fig, ax = plt.subplots(figsize=(8, 5))
-rects1 = ax.bar(x - width/2, gru_vals, width, label='GRU')
-rects2 = ax.bar(x + width/2, lstm_vals, width, label='LSTM')
+rects1 = ax.bar(x - width, gru_vals, width, label='GRU')
+rects2 = ax.bar(x, lstm_vals, width, label='LSTM')
+rects3 = ax.bar(x + width, transformer_vals, width, label='Transformer')
 
 ax.set_ylabel('Values')
-ax.set_title('GRU vs LSTM: Overall Metrics')
+ax.set_title('GRU vs LSTM vs Transformer: Overall Metrics')
 ax.set_xticks(x)
 ax.set_xticklabels(labels, rotation=30, ha="right")
 ax.legend()
 
 # Annotate bars
-for rects in [rects1, rects2]:
+for rects in [rects1, rects2, rects3]:
     for rect in rects:
         height = rect.get_height()
         ax.annotate(f'{height:.2f}',
@@ -67,25 +88,27 @@ plt.tight_layout()
 plt.show()
 
 #plot error categories
-all_categories = sorted(set(gru_errors.keys()) | set(lstm_errors.keys()))
+all_categories = sorted(set(gru_errors.keys()) | set(lstm_errors.keys()) | set(transformer_errors.keys()))
 gru_vals = [gru_errors.get(cat, 0) for cat in all_categories]
 lstm_vals = [lstm_errors.get(cat, 0) for cat in all_categories]
+transformer_vals = [transformer_errors.get(cat, 0) for cat in all_categories]
 
 x = np.arange(len(all_categories))
-width = 0.35
+width = 0.25
 
 fig, ax = plt.subplots(figsize=(10, 6))
-rects1 = ax.bar(x - width/2, gru_vals, width, label='GRU')
-rects2 = ax.bar(x + width/2, lstm_vals, width, label='LSTM')
+rects1 = ax.bar(x - width, gru_vals, width, label='GRU')
+rects2 = ax.bar(x, lstm_vals, width, label='LSTM')
+rects3 = ax.bar(x + width, transformer_vals, width, label='Transformer')
 
 ax.set_ylabel('Average Errors')
-ax.set_title('Error Categories Comparison: GRU vs LSTM')
+ax.set_title('Error Categories Comparison: GRU vs LSTM vs Transformer')
 ax.set_xticks(x)
 ax.set_xticklabels(all_categories, rotation=45, ha="right")
 ax.legend()
 
 # Annotate bars
-for rects in [rects1, rects2]:
+for rects in [rects1, rects2, rects3]:
     for rect in rects:
         height = rect.get_height()
         if height > 0:
