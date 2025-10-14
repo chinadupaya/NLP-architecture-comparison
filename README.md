@@ -16,7 +16,7 @@ Each notebook follows the same flow: load data → tokenize → build model → 
 - Jupyter
 - TensorFlow (CPU is fine)
 - Java 17+ (required for local LanguageTool in grammar evaluation)
-- Optional: Weights & Biases (W&B) account and API key
+- Optional: Weights & Biases (WandB) account and API key
 - macOS users: Homebrew for installing Java and Graphviz if you want model plots
 
 ## 2) Environment setup
@@ -108,34 +108,6 @@ Notes:
 ## 7) Resource monitoring
 
 `resource_monitor.py` provides a Keras callback `ResourceMonitorCB` to collect CPU, memory, and (if present) GPU stats. Some notebooks have it enabled/disabled for parity. If plotting raises shape-mismatch errors on macOS, align series lengths in the notebook’s plotting cell (do not modify `resource_monitor.py`).
-
-## 8) Model plots (optional)
-
-Install dependencies:
-```
-pip install pydot graphviz
-brew install graphviz
-```
-Then in a notebook after the model is built:
-```
-from tensorflow.keras.utils import plot_model
-plot_model(model, to_file='model.png', show_shapes=True, expand_nested=True, dpi=200)
-```
-
-## 9) Reproducibility tips
-
-- Keep the same tokenizer files, dataset, and hyperparameters across all runs.
-- Use the same virtual environment and Jupyter kernel for all notebooks.
-- Pin package versions in `requirements.txt`.
-- Avoid modifying GRU/LSTM notebooks if strict comparability is required.
-
-## 10) Troubleshooting
-
-- LanguageTool Java error: Ensure `JAVA_HOME` points to Java 17 (`/usr/libexec/java_home -v 17`).
-- Kernel died or wrong environment: Recreate the env and kernel; pick `nlp-tf220` when running.
-- Timeout in nbconvert: Increase `--ExecutePreprocessor.timeout` (e.g., 7200 seconds).
-- W&B login issues: Re-run `wandb login` or set `WANDB_API_KEY`; use `WANDB_MODE=offline` to avoid network issues.
-- Missing checkpoint file in GRU: Some notebooks may reference a specific epoch; ensure the file exists or train to that epoch.
 
 ## Installing (legacy quick start)
 ```
